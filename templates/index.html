@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestión Documental</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Municipalidad de Yau</h1>
+    <form method="post">
+        <label>Descripción del trámite o currículo:</label><br>
+        <textarea name="descripcion" required></textarea><br>
+        <button type="submit">Clasificar</button>
+    </form>
+
+    {% if categoria %}
+    <div class="resultado">
+        <strong>Categoría:</strong> {{ categoria }}<br>
+        <p>{{ mensaje }}</p>
+    </div>
+    {% endif %}
+</body>
+</html>
