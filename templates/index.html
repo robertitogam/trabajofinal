@@ -1,23 +1,37 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>Gestión Documental</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Municipalidad de Yau - Gestión de Trámites</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>Municipalidad de Yau</h1>
-    <form method="post">
-        <label>Descripción del trámite o currículo:</label><br>
-        <textarea name="descripcion" required></textarea><br>
-        <button type="submit">Clasificar</button>
-    </form>
+    <div class="container">
+        <h1>Municipalidad de Yau</h1>
+        <p class="subtitle">Sistema automatizado de gestión documental y selección de currículos</p>
 
-    {% if categoria %}
-    <div class="resultado">
-        <strong>Categoría:</strong> {{ categoria }}<br>
-        <p>{{ mensaje }}</p>
+        <form method="post" class="form-box">
+            <label for="descripcion">Selecciona el trámite o currículo:</label>
+            <select name="descripcion" id="descripcion" required>
+                <option value="" disabled selected>-- Selecciona una opción --</option>
+                <option value="Trámite urgente de licencia">Trámite urgente de licencia</option>
+                <option value="Solicitud común de permiso">Solicitud común de permiso</option>
+                <option value="Currículo con experiencia">Currículo con experiencia</option>
+                <option value="Currículo sin experiencia">Currículo sin experiencia</option>
+                <option value="Trámite de servicio público">Trámite de servicio público</option>
+                <option value="Renovación urgente de licencia">Renovación urgente de licencia</option>
+            </select>
+
+            <button type="submit" class="btn">Clasificar</button>
+        </form>
+
+        {% if categoria %}
+        <div class="result-box">
+            <h2>Categoría: <span class="{{ categoria | lower }}">{{ categoria }}</span></h2>
+            <p>{{ mensaje }}</p>
+        </div>
+        {% endif %}
     </div>
-    {% endif %}
 </body>
 </html>

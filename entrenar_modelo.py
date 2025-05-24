@@ -1,32 +1,34 @@
-import pandas as pd
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.naive_bayes import MultinomialNB
+from flask import Flask, render_template, request
 import pickle
 
-# Datos de ejemplo
-data = {
-    'texto': [
-        "Trámite urgente de licencia",
-        "Solicitud común de permiso",
-        "Currículo con experiencia",
-        "Currículo sin experiencia",
-        "Trámite de servicio público",
-        "Renovación urgente de licencia"
-    ],
-    'categoria': [
-        "Urgente", "Normal", "Aceptable", "Rechazado", "Normal", "Urgente"
-    ]
-}
+app = Flask(__name__)
 
-df = pd.DataFrame(data)
+# Cargar modelo y vectorizer
+with open("modelo.pkl", "rb") as f:
+    vectorizer, model = pickle.load(f)
 
-# Modelo
-vectorizer = TfidfVectorizer()
-X = vectorizer.fit_transform(df['texto'])
-y = df['categoria']
-model = MultinomialNB()
-model.fit(X, y)
+# Opciones predefinidas
+opciones = [
+    "Trámite urgente de licencia",
+    "Solicitud común de permiso",
+    "Currículo con experiencia",
+    "Currículo sin experiencia",
+    "Trámite de servicio público",
+    "Renovación urgente de licencia"
+]
 
-# Guardar modelo y vectorizer
-with open("modelo.pkl", "wb") as f:
-    pickle.dump((vectorizer, model), f)
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    categoria = None
+    texto = None
+
+    if request.method == 'POST':
+        texto = request.form.get('texto_opcion')
+        if texto:
+            X = vectorizer.transform([texto])
+            categoria = model.predict(X)[0]
+
+    return render_template('index.html', opciones=opciones, categoria=categoria, texto=texto)
+
+if __name__ == '__main__':
+    app.run(debug=True)
